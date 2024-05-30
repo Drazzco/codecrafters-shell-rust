@@ -1,5 +1,6 @@
 #[allow(unused_imports)]
 use std::io::{self, Write};
+use std::process;
 
 fn main() {
     loop {
@@ -11,7 +12,15 @@ fn main() {
         let mut input = String::new();
         stdin.read_line(&mut input).unwrap();
         let command = input.trim();
-        println!("{command}: command not found");
+        let tokens = tokenize(command);
+
+        match tokens[..] {
+            ["exit", code] => process::exit(code.parse::<i32>().unwrap()),
+            _ => println!("{}: command not found", command),
+        }
     }
-    
+}
+
+fn tokenize(input: &str) -> Vec<&str> {
+    input.split(' ').collect()
 }
