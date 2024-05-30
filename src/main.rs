@@ -14,14 +14,14 @@ fn main() {
         let command = input.trim();
         let tokens = tokenize(command);
 
-        match tokens[..] {
-            ["exit", code] => process::exit(code.parse::<i32>().unwrap()),
-            ["echo"] => println!("{}", tokens[1..].join(" ")),
+        match tokens[0] {
+            "exit" => process::exit(tokens[1].parse::<i32>().unwrap()),
+            "echo" => println!("{}", tokens[1..].join(" ")),
             _ => println!("{}: command not found", command),
         }
     }
 }
 
 fn tokenize(input: &str) -> Vec<&str> {
-    input.split(' ').collect()
+    input.split_whitespace().collect()
 }
