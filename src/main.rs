@@ -17,6 +17,11 @@ fn main() {
         match tokens[0] {
             "exit" => process::exit(tokens[1].parse::<i32>().unwrap()),
             "echo" => println!("{}", tokens[1..].join(" ")),
+            "type" => if tokens[1] == "exit" || tokens[1] == "echo" || tokens[1] == "type" {
+                println!("{} is a shell builtin", tokens[1])
+            } else {
+                println!("{} not found", tokens[1])
+            }
             _ => println!("{}: command not found", command),
         }
     }
