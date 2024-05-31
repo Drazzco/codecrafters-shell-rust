@@ -44,6 +44,7 @@ fn main() {
             unknown => {
                 let path_var = env::var("PATH").unwrap_or_default();
                 let paths: Vec<&str> = path_var.split(':').collect();
+                let mut found = false;
                 let args = &tokens[1..];
                 for path in paths {
                     let mut full_path = Path::new(path).join(unknown);
@@ -53,9 +54,12 @@ fn main() {
                         .args(args)
                         .status()
                         .expect("failed to execute process");
-                    } else {
-                        println!("{}: command not found", tokens[0])
+                        found = true;
+                        break;
                     }
+                }
+                if !found {
+                    println!("{}: command not found", tokens[0]);
                 }
             }
         }
