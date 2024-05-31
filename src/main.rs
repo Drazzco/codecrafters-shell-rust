@@ -1,8 +1,11 @@
 #[allow(unused_imports)]
-use std::env;
-use std::io::{self, Write};
-use std::path::Path;
-use std::process;
+use std::{
+    env,
+    io::{self, Write},
+    path::{Path, PathBuf},
+    process,
+};
+use std::process::Command;
 
 fn main() {
     loop {
@@ -38,7 +41,23 @@ fn main() {
                     println!("{} not found", tokens[1]);
                 }
             }
-            _ => println!("{}: command not found", command),
+            unknown => {
+                let path_var = env::var("PATH").unwrap_or_default();
+                let paths: Vec<&str> = path_var.split(':').collect();
+                let args = &tokens[1..];
+                for path in paths {
+                    let mut full_path = Path::new(path).join(unknown);
+                    full_path.set_extension("");
+                    if full_path.exists() {
+                        Command::new(full_path)
+                        .args(args)
+                        .status()
+                        .expect("failed to execute process");
+                    } else {
+                        println!("{}: command not found", tokens[0])
+                    }
+                }
+            }
         }
     }
 }
