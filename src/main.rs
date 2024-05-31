@@ -45,6 +45,9 @@ fn main() {
                 let current_dir = env::current_dir().unwrap();
                 println!("{}", current_dir.display());
             }
+            "cd" => if env::set_current_dir(Path::new(tokens[1])).is_err() {
+                println!("cd: {}: No such file or directory", tokens[1]);
+            }
             unknown => {
                 let path_var = env::var("PATH").unwrap_or_default();
                 let paths: Vec<&str> = path_var.split(':').collect();
