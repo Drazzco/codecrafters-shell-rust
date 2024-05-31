@@ -41,6 +41,10 @@ fn main() {
                     println!("{} not found", tokens[1]);
                 }
             }
+            "pwd" => {
+                let current_dir = env::current_dir().unwrap();
+                println!("{}", current_dir.display());
+            }
             unknown => {
                 let path_var = env::var("PATH").unwrap_or_default();
                 let paths: Vec<&str> = path_var.split(':').collect();
