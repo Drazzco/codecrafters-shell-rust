@@ -45,8 +45,17 @@ fn main() {
                 let current_dir = env::current_dir().unwrap();
                 println!("{}", current_dir.display());
             }
-            "cd" => if env::set_current_dir(Path::new(tokens[1])).is_err() {
-                eprintln!("{}: No such file or directory", tokens[1]);
+            "cd" => {
+                let _args = tokens[1];
+                match tokens.last() {
+                    None => env::set_current_dir(env::var("HOME").unwrap()).unwrap(),
+                    Some(_args) => {
+                        let dir = tokens[1].replace("~", &env::var("HOME").unwrap());
+                        if env::set_current_dir(Path::new(&dir)).is_err() {
+                            eprintln!("{}: No such file or directory", tokens[1]);
+                    }
+                }
+            }
             }
             unknown => {
                 let path_var = env::var("PATH").unwrap_or_default();
