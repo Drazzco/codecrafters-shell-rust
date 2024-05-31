@@ -46,7 +46,7 @@ fn main() {
                 println!("{}", current_dir.display());
             }
             "cd" => if env::set_current_dir(Path::new(tokens[1])).is_err() {
-                println!("cd: {}: No such file or directory", tokens[1]);
+                println!("{}: No such file or directory\\n", tokens[1]);
             }
             unknown => {
                 let path_var = env::var("PATH").unwrap_or_default();
